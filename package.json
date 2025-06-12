@@ -1,0 +1,12 @@
+{
+    "name": "astal-shell",
+    "dependencies": {
+        "astal": "/usr/share/astal/gjs"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^8.34.0",
+        "@typescript-eslint/parser": "^8.34.0",
+        "eslint": "^9.28.0",
+        "typescript": "^5.8.3"
+    }
+}

@@ -1,0 +1,100 @@
+// https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
+$fg-color: #{"@theme_fg_color"};
+$bg-color: #{"@theme_bg_color"};
+
+window.Bar {
+    background: transparent;
+    color: $fg-color;
+    font-weight: bold;
+
+    >centerbox {
+        background: $bg-color;
+        border-radius: 10px;
+        margin: 8px;
+    }
+
+    button {
+        border-radius: 8px;
+        margin: 2px;
+    }
+
+    .control-popup {
+        margin-top: 12px;
+        /* min-width: 600px; */
+        height: auto;
+        min-height: 400px;
+        padding: 20px;
+
+        label {
+            font-size: 18px;
+            font-weight: normal;
+            font-family: "SFMono";
+            color: $fg-color;
+            margin: 16px;
+        }
+
+        .group-menu {
+            /* margin: 1px; */
+            background-color: #202020;
+            border-radius: 12px;
+            min-height: 200px;
+            * {
+                all: unset;
+            }
+            label {
+                font-weight: normal;
+                margin: 24px;
+                font-size: 14px;
+                color: #ffffff50;
+            }
+        }
+    }
+
+    .control-popup .audio-slider {
+        /* background-color: yellow; */
+        min-width: 200px;
+        /* height: 3em; */
+
+        label {
+            color: #ffffff90;
+            font-size: 18px;
+            margin: 20px;
+            line-height: 1;
+        }
+        
+        * {
+            all: unset;
+            /* border:1px solid red; */
+        }
+
+        scale {
+            /* These properties will style the drawValue text */
+            color: #89b4fa;         /* A nice blue color for the text */
+            font-size: 1.1em;        /* Make the font a bit larger */
+            font-weight: bold;       /* Make the font bold */
+        }
+
+        trough {
+            background: #29272c;
+            border-radius: 12px;
+            overflow: hidden;
+        } 
+        highlight {
+            background-color: #464543;
+            min-height: 5em;
+            border-radius: 12px;
+        }
+        /* slider { */
+            /* background: #2e302e; */
+            /* min-width: 4px; */
+            /* min-height: 2em; */
+            /* margin-right: 8px; */
+        /* } */
+        
+    }
+    
+
+    .calendar-popup {
+        margin-top: 12px;
+    }
+}
