@@ -1,5 +1,6 @@
 import { App, Astal, Gtk, Gdk, Audio } from "astal/gtk4"
 import { Variable } from "astal"
+import Slider from "./components/Slider"
 
 const time = Variable("").poll(10000, "date '+%d/%m %R'")
 
@@ -28,44 +29,23 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
                         >
                                 <label halign={Gtk.Align.START}label={"Control Center"}/>
                             <box >
-                                <box
-                                    cssClasses={["group-menu"]}
-                                    valign={Gtk.Align.START}
-                                    orientation={Gtk.Orientation.VERTICAL} 
-                                    hSpacing={8} 
+                                <Slider title={"Brightness"} icon={"display-brightness"}/>
+                                <Slider title={"Volume"} icon={"audio-volume-high"}/>
+                            </box>
+                            <box cssClasses={["button-group"]}>
+                                <button
+                                    cssClasses={["menu-toggle", "active"]}
+                                    onClicked="echo hi"
                                 >
-                                    <label halign={Gtk.Align.START} label={"Brightness"}/>
-                                    <box vexpand valign={Gtk.Align.END} cssClasses={["audio-slider"]}>
-                                        <overlay>
-                                              <box >
-                                                <slider hexpand drawValue={false} />
-
-                                                  </box>
-                                                <label
-                                                    label="01"
-                                                    halign={Gtk.Align.START}
-                                                    valign={Gtk.Align.CENTER}
-                                                    type="overlay"
-                                                    canFocus={false}
-                                                    canTarget={false}
-                                                    passThrough
-                                                />
-                                        </overlay>
-                                    </box>
-                                </box>
-                                <box
-                                    cssClasses={["group-menu"]}
-                                    valign={Gtk.Align.START}
-                                    orientation={Gtk.Orientation.VERTICAL} 
-                                    hSpacing={8} 
+                                    <Gtk.Image cssClasses={["icon"]} pixelSize={24} iconName={"network-wireless"}/>
+                                </button>
+                                <button
+                                    cssClasses={["menu-toggle"]}
+                                    onClicked="echo hi"
                                 >
-                                    <label halign={Gtk.Align.START} label={"Sound"}/>
-                                    <box vexpand valign={Gtk.Align.END} cssClasses={["audio-slider"]}>
-                                        <slider hexpand drawValue={false} />
-                                    </box>
-                                </box>
-
-                             </box>
+                                    <Gtk.Image cssClasses={["icon"]} pixelSize={24} iconName={"bluetooth-active"} />
+                                </button>
+                            </box>
                         </box>
                     </popover>
                 </menubutton>
@@ -84,12 +64,3 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         </centerbox>
     </window>
 }
-
-
-            // <button
-            //     onClicked="echo hello"
-            //     hexpand
-            //     halign={Gtk.Align.CENTER}
-            // >
-            //     Welcome to AGS!
-            // </button>
