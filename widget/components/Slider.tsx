@@ -1,7 +1,8 @@
 import { App, Astal, Gtk, Gdk, Audio } from "astal/gtk4"
-import { Variable } from "astal"
+import { Variable, bind, exec} from "astal"
 
 export default function Slider(props) {
+   const currentValue = Variable("")
   return  <box
             cssClasses={["group-menu"]}
             valign={Gtk.Align.START}
@@ -13,11 +14,23 @@ export default function Slider(props) {
             <box vexpand valign={Gtk.Align.END} cssClasses={["audio-slider"]}>
                 <overlay>
                       <box >
-                        <slider hexpand drawValue={false} />
-
+                        <slider
+                          hexpand
+                            onValueChanged={slider => {
+                              // log(slider.value)
+                              if(props.title == "Brightness") {
+                                const round = Math.round(slider.value * 100)
+                                log(round)
+                                  exec(`sh -c "brightnessctl set ${round}%"`)
+                              }
+                              props.item.volume = slider.value
+                              currentValue.set(slider.value)
+                              }}
+                            value={props.initialValue}
+                            />
                           </box>
                         <label
-                            label="01"
+                            label={currentValue((v) => `${Math.round(v * 100)}`)}
                             halign={Gtk.Align.START}
                             valign={Gtk.Align.CENTER}
                             type="overlay"

@@ -1,15 +1,22 @@
-import { App, Astal, Gtk, Gdk, Audio } from "astal/gtk4"
-import { Variable } from "astal"
+import { App, Astal, Gtk, Gdk } from "astal/gtk4"
+import { Variable, bind, exec } from "astal"
 import Slider from "./components/Slider"
 
+import Wp from "gi://AstalWp"
+
 const time = Variable("").poll(10000, "date '+%d/%m %R'")
+const wp = Wp.get_default()
+const speaker = wp.audio.default_speaker;
+
+const volumeLevel = new Variable(0).poll(1000, () => {
+    const output = exec(`sh -c "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}'"`);
+    const numericValue = parseFloat(output) || 0;
+    return numericValue
+})
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
-    const percentage = new Variable(
-        () => `${Math.round((speaker?.volume ?? 0) * 100)}%`
-    );
-
+    
     return <window
         visible
         cssClasses={["Bar"]}
@@ -29,8 +36,8 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
                         >
                                 <label halign={Gtk.Align.START}label={"Control Center"}/>
                             <box >
-                                <Slider title={"Brightness"} icon={"display-brightness"}/>
-                                <Slider title={"Volume"} icon={"audio-volume-high"}/>
+                                <Slider title={"Brightness"} item={time} initialValue={0.75} icon={"display-brightness"}/>
+                                <Slider title={"Volume"} item={speaker} initialValue={volumeLevel((v)=> v)} icon={"audio-volume-high"}/>
                             </box>
                             <box cssClasses={["button-group"]}>
                                 <button
@@ -46,13 +53,27 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
                                     <Gtk.Image cssClasses={["icon"]} pixelSize={24} iconName={"bluetooth-active"} />
                                 </button>
                             </box>
+                            <box cssClasses={["button-group"]}>
+                                <button
+                                    cssClasses={["menu-toggle", ""]}
+                                    onClicked="echo hi"
+                                >
+                                    <Gtk.Image cssClasses={["icon"]} pixelSize={24} iconName={"user-available"}/>
+                                </button>
+                                <button
+                                    cssClasses={["menu-toggle"]}
+                                    onClicked="echo hi"
+                                >
+                                    <Gtk.Image cssClasses={["icon"]} pixelSize={24} iconName={"application-exit"} />
+                                </button>
+                            </box>
                         </box>
                     </popover>
                 </menubutton>
                 <menubutton
                     hexpand
                 >
-                    <label label={time()} />
+                    <label label={time()}/>
                     <popover
                         hasArrow={false}
                         cssClasses={["calendar-popup"]}
