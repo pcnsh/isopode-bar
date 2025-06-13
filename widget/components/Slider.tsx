@@ -1,8 +1,52 @@
 import { App, Astal, Gtk, Gdk, Audio } from "astal/gtk4"
-import { Variable, bind, exec} from "astal"
+import { Variable, GLib, bind, exec} from "astal"
+
+
+
+const debounce = (func, delay) => {
+    let timeoutId = null;
+
+    return (...args) => {
+        // If a timer is already running, cancel it
+        if (timeoutId) {
+            GLib.source_remove(timeoutId);
+        }
+        
+        // Set a new timer
+        timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, delay, () => {
+            // When the timer finishes, execute the original function
+            func(...args);
+            timeoutId = null; // Clear the timer ID
+            return GLib.SOURCE_REMOVE; // Don't repeat the timer
+        });
+    };
+};
 
 export default function Slider(props) {
-   const currentValue = Variable("")
+ const currentValue = Variable("")
+
+
+const debouncedUpdate = debounce(sliderValue => {
+    // This code will only run 500ms after the user stops moving the slider.
+    
+    // Note: We pass 'sliderValue' directly instead of the whole 'slider' object.
+    const value = sliderValue;
+
+    if(props.title == "Brightness") {
+        const round = Math.round(value * 100);
+        log(round);
+        exec(`sh -c "brightnessctl set ${round}%"`);
+    }
+    
+    // This part seems to be for a different kind of item (volume).
+    // Ensure that 'props.item' exists before trying to set a property on it.
+    if (props.item) {
+        props.item.volume = value;
+    }
+
+    currentValue.set(value);
+}, 200); // 500ms = 0.5 seconds
+   
   return  <box
             cssClasses={["group-menu"]}
             valign={Gtk.Align.START}
@@ -19,9 +63,7 @@ export default function Slider(props) {
                             onValueChanged={slider => {
                               // log(slider.value)
                               if(props.title == "Brightness") {
-                                const round = Math.round(slider.value * 100)
-                                log(round)
-                                  exec(`sh -c "brightnessctl set ${round}%"`)
+                                debouncedUpdate(slider.value);                                
                               }
                               props.item.volume = slider.value
                               currentValue.set(slider.value)
