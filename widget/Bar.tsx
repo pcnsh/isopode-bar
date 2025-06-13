@@ -13,7 +13,9 @@ const volumeLevel = new Variable(0).poll(1000, () => {
     const numericValue = parseFloat(output) || 0;
     return numericValue
 })
-
+const command = "sh -c \"brightnessctl i | grep -oP '\\(\\K[0-9]+' | awk '{printf \\\"%.2f\\n\\\", \\$1/100}'\""
+const brightLevel = Variable(exec(command))
+log(brightLevel.get())
 export default function Bar(gdkmonitor: Gdk.Monitor) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
     
@@ -27,8 +29,8 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         <centerbox cssName="centerbox">
             <box/>
             <box halign={Gtk.Align.END}>
-                <menubutton>
-                    <Gtk.Image iconName={"system-search"}/>
+                <menubutton cssClasses={["bar-button"]}>
+                    <Gtk.Image pixelSize={14} iconName={"system-search"}/>
                     <popover autohide={false} hasArrow={false} cssClasses={["control-popup"]} position={Gtk.PositionType.BOTTOM}>
                         <box
                             halign={Gtk.Align.END}
@@ -36,7 +38,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
                         >
                                 <label halign={Gtk.Align.START}label={"Control Center"}/>
                             <box >
-                                <Slider title={"Brightness"} item={time} initialValue={0.75} icon={"display-brightness"}/>
+                                <Slider title={"Brightness"} item={time} initialValue={brightLevel()} icon={"display-brightness"}/>
                                 <Slider title={"Volume"} item={speaker} initialValue={volumeLevel((v)=> v)} icon={"audio-volume-high"}/>
                             </box>
                             <box cssClasses={["button-group"]}>

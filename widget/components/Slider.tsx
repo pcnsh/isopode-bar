@@ -26,6 +26,7 @@ export default function Slider(props) {
                               props.item.volume = slider.value
                               currentValue.set(slider.value)
                               }}
+                            min={0.2}
                             value={props.initialValue}
                             />
                           </box>

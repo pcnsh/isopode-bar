@@ -5,7 +5,8 @@ $bg-color: #{"@theme_bg_color"};
 window.Bar {
     background: transparent;
     color: $fg-color;
-    font-weight: bold;
+    font-family: "SFMono";
+    /* font-weight: bold; */
 
     >centerbox {
         background: $bg-color;
@@ -17,6 +18,26 @@ window.Bar {
         border-radius: 8px;
         margin: 2px;
     }
+
+    button:active,
+    button:checked
+    /* button:visited, */
+    /* button:focus */
+     {
+        background: #464543;
+        outline: none;
+    }
+    button:active,
+    button:checked,
+    button:visited,
+    button:focus
+     {
+        /* background: red; */
+        outline: none;
+    }
+    button:focus-within {
+    /* background: red; */
+}
 
 
     .control-popup {
